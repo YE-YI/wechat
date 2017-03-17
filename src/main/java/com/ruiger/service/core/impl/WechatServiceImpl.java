@@ -3,14 +3,19 @@ package com.ruiger.service.core.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.ruiger.modle.message.common.Data;
 import com.ruiger.modle.message.response.Article;
 import com.ruiger.modle.message.response.NewsMessage;
 import com.ruiger.modle.message.response.TextMessage;
 import com.ruiger.service.core.WechatService;
+import com.ruiger.service.message.MessageService;
 import com.ruiger.service.todayinhistory.TodayInHistory;
 import com.ruiger.util.HttpUtil;
 import com.ruiger.util.MessageUtil;
+import com.ruiger.util.TemplateUtil;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -30,6 +35,12 @@ import java.util.regex.Pattern;
 public class WechatServiceImpl implements WechatService {
 
 	private static Logger log = Logger.getLogger(WechatServiceImpl.class);
+
+	@Autowired
+	private MessageService messageService;
+
+	@Autowired
+	private Environment env;
 
 
 	/**
@@ -87,7 +98,7 @@ public class WechatServiceImpl implements WechatService {
 					if (!StringUtils.isEmpty(content) && content.contains("盼盼套图")) {
 						//直接跳到网页
 						String key = content.replace("盼盼套图", "");
-						String url = "http://mtzz.ngrok.cc/keyUrl?key=" + key;
+						String url = "http://1w629o6087.51mypc.cn/business/meituzz/keyUrl?key=" + key;
 						content = HttpUtil.executeUrl(url, HttpUtil.HTTP_POST);
 						Article article = new Article();
 						article.setTitle("闫盼盼作品" + key);
@@ -95,7 +106,7 @@ public class WechatServiceImpl implements WechatService {
 						article.setDescription("");
 						// 将图片置为空
 						article.setPicUrl(content.replace("\\",""));
-						article.setUrl("http://mtzz.ngrok.cc/view/meitu.html?key=" + key);
+						article.setUrl("http://1w629o6087.51mypc.cn/wx/meitu.html?key=" + key);
 						articleList.add(article);
 						newsMessage.setArticleCount(articleList.size());
 						newsMessage.setArticles(articleList);
@@ -112,6 +123,7 @@ public class WechatServiceImpl implements WechatService {
 								buffer.append("13  可测试网址").append("\n");
 								buffer.append("笑话  来福岛随机5个笑话").append("\n");
 								buffer.append("搞笑  来福岛随机8个搞笑图片").append("\n");
+								buffer.append("学车 老司机教你怎么把车飚起来").append("\n\n");
 								buffer.append("或者您可以尝试发送表情").append("\n\n");
 								buffer.append("回复“0”显示此帮助菜单").append("\n");
 								respContent = String.valueOf(buffer);
@@ -228,8 +240,16 @@ public class WechatServiceImpl implements WechatService {
 								break;
 							}
 
+							case "学车":{
+								respContent = "自己动手丰衣足食，收破烂的GitHub：https://github.com/YE-YI/";
+								respContent += "老司机教你开车哦！";
+								textMessage.setContent(respContent);
+								respMessage = MessageUtil.textMessageToXml(textMessage);
+								break;
+							}
+
 							case "闫盼盼": {
-								String url = "http://mtzz.ngrok.cc/group";
+								String url = "http://1w629o6087.51mypc.cn/business/meituzz/group";
 								content = HttpUtil.executeUrl(url, HttpUtil.HTTP_GET);
 								JSONArray array = JSON.parseArray(content);
 								StringBuilder sb = new StringBuilder("输入‘套图+作品id'查看套图，例如‘盼盼套图1109’").append("\n\n");
@@ -299,15 +319,35 @@ public class WechatServiceImpl implements WechatService {
 				if (eventType.equals(MessageUtil.EVENT_TYPE_CLICK)) {
 					switch (eventKey){
 						case "11":{
-							respContent = "这是第一栏第一个";
+							respContent = "老司机开车了，请系好安全带";
+							respContent += "摆渡芸链接：https://pan.baidu.com/s/1qXSpYFi";
+							respContent += "提取密码：4sur" + "\n";
+							respContent += "自己动手丰衣足食，收破烂的GitHub：https://github.com/YE-YI/";
+							respContent += "老司机教你开车哦！";
 							break;
 						}
 						case "12":{
-							respContent = "这是第一栏第一个";
+							Data data = messageService.assembleDirver();
+							String template_id = env.getProperty("com.ruiger.constant.templateid.driverid");
+							int code = TemplateUtil.sendTemplate(fromUserName, template_id,data);
+							if (code == 0) {
+								respContent = "乘客您好，您的好基友派已经送达";
+							}
 							break;
 						}
+						case "13":{
+							respContent = "老司机开车了，请系好安全带";
+							respContent += "摆渡芸链接：https://pan.baidu.com/s/1dFvIDG1";
+							respContent += "提取密码：3a99" + "\n";
+							respContent += "自己动手丰衣足食，收破烂的GitHub：https://github.com/YE-YI/";
+							respContent += "老司机教你开车哦！";
+							break;
+						}
+
 						case "21":{
-							respContent = "这是第二栏第一个";
+							respContent = "老司机开车了，请系好安全带";
+							respContent += "摆渡芸链接：https://pan.baidu.com/s/1gfcbEJT";
+							respContent += "提取密码：pfxu";
 							break;
 						}
 

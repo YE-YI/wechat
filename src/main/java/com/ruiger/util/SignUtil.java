@@ -1,10 +1,16 @@
 package com.ruiger.util;
 
+import com.ruiger.constant.Constant;
+import com.ruiger.thread.AccessTokenThread;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author 睿哥
@@ -37,15 +43,7 @@ public class SignUtil {
 			str.append(s);
 		}
 		MessageDigest md = null;
-		String tmpStr = null;
-		try {
-			//加密
-			md = MessageDigest.getInstance("SHA-1");
-			byte[] diget = md.digest(str.toString().getBytes());
-			tmpStr = byteToStr(diget);
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
+		String tmpStr =encrypt_SHA(str.toString());
 		if(tmpStr != null){
 			if(tmpStr.equals(signature.toUpperCase())){
 				logger.info("微信验证成功");
@@ -54,6 +52,44 @@ public class SignUtil {
 		}
 		logger.info("微信验证失败");
 		return false;
+	}
+
+	/**
+	 * 获取微信jssdk wx_config 必要参数
+	 * @param nonceStr
+	 * @param timestamp
+	 * @param pageUrl
+	 * @return
+	 */
+	public static Map<String,Object> getWxConfig(String appId,String nonceStr, String timestamp, String pageUrl){
+		Map<String, Object> ret = new HashMap<String, Object>();
+		String sign = "jsapi_ticket=" + AccessTokenThread.jsApiTicket.getTicket() + "&noncestr=" + nonceStr+ "&timestamp=" + timestamp + "&url=" + pageUrl;
+		String signature = encrypt_SHA(sign);
+		ret.put("appId", appId);
+		ret.put("timestamp", timestamp);
+		ret.put("nonceStr", nonceStr);
+		ret.put("signature", signature);
+		return ret;
+	}
+
+
+	/**
+	 * SHA-1 加密
+	 * @param str
+	 * @return
+	 */
+	private static String encrypt_SHA(String str){
+		MessageDigest md = null;
+		String tmpStr = null;
+		try {
+			//加密
+			md = MessageDigest.getInstance("SHA-1");
+			byte[] diget = md.digest(str.getBytes());
+			tmpStr = byteToStr(diget);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		return tmpStr;
 	}
 
 	/**

@@ -1,11 +1,15 @@
 package com.ruiger.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.ruiger.constant.Constant;
 import com.ruiger.modle.menu.Menu;
 import com.ruiger.service.menu.MenuService;
 import com.ruiger.thread.AccessTokenThread;
+import com.ruiger.util.WeixinUtil;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,6 +35,9 @@ public class MenuController {
 	@Autowired
 	private MenuService menuService;
 
+	@Autowired
+	private Environment env;
+
 	/**
 	 * 获取所有菜单
 	 * @return
@@ -54,6 +61,7 @@ public class MenuController {
 	@RequestMapping(value = "/create",method = RequestMethod.POST)
 	public int createMenu(){
 		String token = AccessTokenThread.accessToken.getToken();
+//		String token = WeixinUtil.getAccessToken(constant.getAppid(),constant.getAppsecret()).getToken();
 		int result = 0;
 		if(token != null){
 			result = menuService.createMenu(getDefaultMenu(),token);
@@ -89,12 +97,12 @@ public class MenuController {
 	/**
 	 * 组装菜单数据
 	 */
-	public static Map<String, Object> getDefaultMenu(){
+	public  Map<String, Object> getDefaultMenu(){
 		Map<String ,Object> wechatMenuMap = new HashMap<>();
 		//第一栏菜单
 		Menu menu1=new Menu();
 		menu1.setId("1");
-		menu1.setName("日韩");
+		menu1.setName("资源");
 		menu1.setType("click");
 		menu1.setKey("1");
 
@@ -110,6 +118,11 @@ public class MenuController {
 		menu12.setType("click");
 		menu12.setKey("12");
 
+		Menu menu13=new Menu();
+		menu13.setId("13");
+		menu13.setName("日韩");
+		menu13.setType("click");
+		menu13.setKey("13");
 		//第二栏
 		Menu menu2=new Menu();
 		menu2.setId("2");
@@ -129,7 +142,9 @@ public class MenuController {
 		menu3.setId("3");
 		menu3.setName("版权说明");
 		menu3.setType("view");
-		menu3.setUrl("http://www.weibo.com");
+		//生成跳转首页
+		String server_url = env.getProperty("server.url");
+		menu3.setUrl(server_url + "redirect/forward");
 
 
 		//包装button的List
