@@ -123,18 +123,20 @@ public class MenuController {
 		menu13.setName("日韩");
 		menu13.setType("click");
 		menu13.setKey("13");
+
+		Menu menu14=new Menu();
+		menu14.setId("14");
+		menu14.setName("主播");
+		menu14.setType("click");
+		menu14.setKey("14");
 		//第二栏
 		Menu menu2=new Menu();
 		menu2.setId("2");
-		menu2.setName("网红");
+		menu2.setName("每日飙车");
 		menu2.setType("click");
 		menu2.setKey("2");
 
-		Menu menu21=new Menu();
-		menu21.setId("21");
-		menu21.setName("主播");
-		menu21.setType("click");
-		menu21.setKey("21");
+
 
 
 
@@ -154,6 +156,8 @@ public class MenuController {
 		Map<String, Object> menuMap1 = new HashMap();
 		Map<String, Object> menuMap11 = new HashMap();
 		Map<String, Object> menuMap12 = new HashMap();
+		Map<String, Object> menuMap13 = new HashMap();
+		Map<String, Object> menuMap14 = new HashMap();
 		List<Map<String, Object>> subMenuMapList1 = new ArrayList();
 
 
@@ -163,7 +167,7 @@ public class MenuController {
 		menuMap11.put("key",menu11.getKey());
 		subMenuMapList1.add(menuMap11);
 
-		//第二栏第二个
+		//第一栏第二个
 		menuMap12.put("name",menu12.getName());
 		menuMap12.put("type",menu12.getType());
 		menuMap12.put("key",menu12.getKey());
@@ -172,18 +176,26 @@ public class MenuController {
 		menuMap1.put("name",menu1.getName());
 		menuMap1.put("sub_button",subMenuMapList1);
 
+		//第一栏第三个
+		menuMap13.put("name",menu13.getName());
+		menuMap13.put("type",menu13.getType());
+		menuMap13.put("key",menu13.getKey());
+		subMenuMapList1.add(menuMap13);
+
+		//第一栏第四个
+		menuMap14.put("name",menu14.getName());
+		menuMap14.put("type",menu14.getType());
+		menuMap14.put("key",menu14.getKey());
+		subMenuMapList1.add(menuMap14);
+
 		//包装第二栏
 		Map<String, Object> menuMap2 = new HashMap();
-		Map<String, Object> menuMap21 = new HashMap();
 		List<Map<String, Object>> subMenuMapList2 = new ArrayList();
-
-		//第二栏第一个
-		menuMap21.put("name",menu21.getName());
-		menuMap21.put("type",menu21.getType());
-		menuMap21.put("key",menu21.getKey());
-		subMenuMapList2.add(menuMap21);
-
 		menuMap2.put("name",menu2.getName());
+		menuMap2.put("type",menu2.getType());
+		menuMap2.put("key",menu2.getKey());
+
+
 		menuMap2.put("sub_button",subMenuMapList2);
 
 		//包装第三栏

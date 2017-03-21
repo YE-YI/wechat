@@ -71,17 +71,27 @@ body {
 }
 
 .swiper-container {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    /*        left: 50%;
-            top: 50%;
-            margin-left: -150px;
-            margin-top: -150px;*/
+
+}
+.swiper-wrapper {
+    -webkit-perspective: 1200px;
+    -moz-perspective: 1200px;
+    -ms-perspective: 1200px;
+    perspective: 1200px;
 }
 .swiper-slide {
-    background-position: center;
-    background-size: contain;
+    position: relative;
+    -webkit-transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+    -ms-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    background-size:100% auto;
+    overflow:hidden;
+    text-align:center;
+    line-height:300px;
+}
+.swiper-slide img{
+    max-width:100%;
 }
 .ani{
     position:absolute;width:100%; height:100%;left:0px;top:0px;
@@ -222,67 +232,3 @@ body {
     100% { -webkit-transform: translateY(-100%); transform: translateY(-100%); opacity:0;}
 }
 
-/*结尾 ----------------*/
-/*音乐*/
-.music{
-    position: absolute;
-    z-index: 1111;
-    left: 20px;
-    top: 20px;
-    z-index: 1000;
-}
-.open{
-    /*-webkit-animation: moveIconRo ease 3.5s both infinite;*/
-    -webkit-animation: moveRo linear 3.5s  infinite;
-    animation-delay:0;
-}
-.icon-music{
-    width: 25px;
-    height: 25px;
-    background: url(../images/icon-muisc.png);
-    background-size: 100% 100%;
-    display: block;
-}
-.music-span{
-    position: absolute;
-    top: -5px;
-    left: 6px;
-    width: 12px;
-    height: 12px;
-    background: url(../images/music-span.png);
-    background-size: 100% 100%;
-    -webkit-animation: openIconRo ease 1.2s both infinite;
-    animation: openRo ease 1.2s both infinite;
-    z-index: -1;
-}
-
-
-.music_text{
-    color: #000;
-    margin-left: 5px;
-    font-size: 20px;
-    opacity: 0;
-}
-
-@keyframes show_hide{
-    from{
-        opacity: 0;
-    }to{
-         opacity: 1;
-     }
-}
-@-webkit-keyframes show_hide{
-    from{
-        opacity: 0;
-    }to{
-         opacity: 1;
-     }
-}
-
-.show_hide{
-    animation: show_hide 1s linear infinite alternate;
-    -webkit-animation: show_hide 1s linear infinite alternate;
-}
-.xin_info{
-    opacity: 0;
-}

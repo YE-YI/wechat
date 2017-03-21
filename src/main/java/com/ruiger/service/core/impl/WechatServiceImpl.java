@@ -3,10 +3,12 @@ package com.ruiger.service.core.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.ruiger.modle.business.UgirlNum;
 import com.ruiger.modle.message.common.Data;
 import com.ruiger.modle.message.response.Article;
 import com.ruiger.modle.message.response.NewsMessage;
 import com.ruiger.modle.message.response.TextMessage;
+import com.ruiger.service.business.UgirlService;
 import com.ruiger.service.core.WechatService;
 import com.ruiger.service.message.MessageService;
 import com.ruiger.service.todayinhistory.TodayInHistory;
@@ -16,6 +18,7 @@ import com.ruiger.util.TemplateUtil;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -38,6 +41,9 @@ public class WechatServiceImpl implements WechatService {
 
 	@Autowired
 	private MessageService messageService;
+
+	@Autowired
+	private UgirlService ugirlService;
 
 	@Autowired
 	private Environment env;
@@ -324,6 +330,9 @@ public class WechatServiceImpl implements WechatService {
 							respContent += "提取密码：4sur" + "\n";
 							respContent += "自己动手丰衣足食，收破烂的GitHub：https://github.com/YE-YI/";
 							respContent += "老司机教你开车哦！";
+							textMessage.setContent(respContent);
+							// 将文本消息对象转换成xml字符串
+							respMessage = MessageUtil.textMessageToXml(textMessage);
 							break;
 						}
 						case "12":{
@@ -331,7 +340,11 @@ public class WechatServiceImpl implements WechatService {
 							String template_id = env.getProperty("com.ruiger.constant.templateid.driverid");
 							int code = TemplateUtil.sendTemplate(fromUserName, template_id,data);
 							if (code == 0) {
-								respContent = "乘客您好，您的好基友派已经送达";
+								respMessage = "";
+							}else {
+								textMessage.setContent(respContent);
+								// 将文本消息对象转换成xml字符串
+								respMessage = MessageUtil.textMessageToXml(textMessage);
 							}
 							break;
 						}
@@ -341,24 +354,48 @@ public class WechatServiceImpl implements WechatService {
 							respContent += "提取密码：3a99" + "\n";
 							respContent += "自己动手丰衣足食，收破烂的GitHub：https://github.com/YE-YI/";
 							respContent += "老司机教你开车哦！";
+							textMessage.setContent(respContent);
+							// 将文本消息对象转换成xml字符串
+							respMessage = MessageUtil.textMessageToXml(textMessage);
 							break;
 						}
 
-						case "21":{
+						case "14":{
 							respContent = "老司机开车了，请系好安全带";
 							respContent += "摆渡芸链接：https://pan.baidu.com/s/1gfcbEJT";
 							respContent += "提取密码：pfxu";
+							textMessage.setContent(respContent);
+							// 将文本消息对象转换成xml字符串
+							respMessage = MessageUtil.textMessageToXml(textMessage);
+							break;
+						}
+
+						case "2":{
+							List<UgirlNum> list = ugirlService.find8Record();
+							//图文消息每天限制8个
+							for (UgirlNum ugirlNum :list){
+								Article article = new Article();
+								article.setTitle(ugirlNum.getTitle());
+								article.setPicUrl(ugirlNum.getUrl().replace("\\",""));
+								article.setUrl(env.getProperty("server.url") +"wx/ugirl.html?no="+ugirlNum.getNo());
+								articleList.add(article);
+							}
+
+							newsMessage.setArticleCount(articleList.size());
+							newsMessage.setArticles(articleList);
+							respMessage = MessageUtil.newsMessageToXml(newsMessage);
 							break;
 						}
 
 						default:{
 							log.error("开发者反馈：EventKey值没找到，它是:"+eventKey);
 							respContent= "很抱歉，此按键功能正在升级无法使用";
+							textMessage.setContent(respContent);
+							// 将文本消息对象转换成xml字符串
+							respMessage = MessageUtil.textMessageToXml(textMessage);
 						}
 					}
-					textMessage.setContent(respContent);
-					// 将文本消息对象转换成xml字符串
-					respMessage = MessageUtil.textMessageToXml(textMessage);
+
 				}
 				else if(eventType.equals(MessageUtil.EVENT_TYPE_VIEW)){
 					// 对于点击菜单转网页暂时不做推送

@@ -1,5 +1,5 @@
 // 测试环境（）
-var server = "http://1w629o6087.51mypc.cn/";
+var server = "http://ruiger.ngrok.cc/";
 
 var agentName = "ruigerAgent";
 var OpenidAgent = "OpenidAgent";

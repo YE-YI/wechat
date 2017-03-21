@@ -28,7 +28,6 @@
 	<script type="text/javascript" src="js/common_http.js"></script>
 
 
-
 	<link rel="stylesheet" href="/webjarslocator/swiper/swiper.min.css">
 
 	<link rel="stylesheet" href="css/music.css">
@@ -42,17 +41,18 @@
 <div style="height: 50px;width: 100%;max-width: 0 auto;">
 	<h1>闫盼盼-美图赚赚VIP收费套图</h1>
 </div>
-
-<div class="swiper-container">
-	<div class="swiper-wrapper" id="meitu_list">      <!--First Slide-->
+<div style="max-width:640px; margin:0 auto;">
+	<div class="swiper-container">
+		<div class="swiper-wrapper" id="meitu_list">      <!--First Slide-->
+		</div>
+		<div class="swiper-pagination"></div>
 	</div>
-	<div class="swiper-pagination"></div>
 </div>
-
 <div class="music">
 	<i class="icon-music open" num="1"></i>
 	<i class="music-span"></i>
-	<audio id="aud" src="http://file1.zuiku.com/2015/04/09/17/8_9fc1a3011b13a95f331a5ba0e693b34d.mp3"  loop="loop" autoplay="autoplay"></audio>
+	<audio id="aud" src="http://file1.zuiku.com/2015/04/09/17/8_9fc1a3011b13a95f331a5ba0e693b34d.mp3" loop="loop"
+		   autoplay="autoplay"></audio>
 	<div class="music_text">开启</div>
 </div>
 <div class="button_sp_area">
@@ -73,14 +73,12 @@
 		//初始化数据
 		var key = getUrlVars()['key'];
 		var param = {
-			'key':key
+			'key': key
 		};
 		getReqPromise("business/meituzz/view", param).then(function (data) {
 			var html = template("meitu_list_tmpl", data);
 			$('#meitu_list').html(html);
 		});
-
-
 
 
 		var mySwiper = $('.swiper-container').swiper({
@@ -94,7 +92,7 @@
 
 	});
 
-	$(function(){
+	$(function () {
 		var params = {
 			'page_url': window.location.href
 		};
@@ -111,7 +109,7 @@
 			wx_share();
 		});
 
-		function wx_share(){
+		function wx_share() {
 			wx.ready(function () {
 				// 获取“分享到朋友圈”按钮点击状态及自定义分享内容接口
 				wx.onMenuShareTimeline({
