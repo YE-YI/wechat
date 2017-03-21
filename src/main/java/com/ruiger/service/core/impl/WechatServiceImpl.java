@@ -282,7 +282,7 @@ public class WechatServiceImpl implements WechatService {
 								respContent = "汤不热福利来袭";
 								respContent = "声明：\n" +
 										"      Tumblr（中文名：汤博乐）成立于2007年，是目前全球最大的轻博客网站。所有用户皆可免费注册浏览，由于政策问题在国内（中国）暂无法访问，本公众号所发布Tumblr相关内容皆与Tumblr公司无关，是爱好者的经验之谈，用于交流学习。";
-								respContent += "各位看官请自行google翻墙如何登陆tumblr";
+								respContent += "\n各位看官请自行google翻墙如何登陆tumblr\n";
 								respContent += "福利视频：https://pan.baidu.com/s/1pLnqYDX";
 								respContent += "提取密码：unuh" + "\n";
 								respContent += "自己动手丰衣足食，收破烂的GitHub：https://github.com/YE-YI/";
