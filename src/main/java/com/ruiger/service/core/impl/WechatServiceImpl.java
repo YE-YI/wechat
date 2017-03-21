@@ -104,7 +104,7 @@ public class WechatServiceImpl implements WechatService {
 					if (!StringUtils.isEmpty(content) && content.contains("盼盼套图")) {
 						//直接跳到网页
 						String key = content.replace("盼盼套图", "");
-						String url = "http://1w629o6087.51mypc.cn/business/meituzz/keyUrl?key=" + key;
+						String url = env.getProperty("server.url") + "business/meituzz/keyUrl?key=" + key;
 						content = HttpUtil.executeUrl(url, HttpUtil.HTTP_POST);
 						Article article = new Article();
 						article.setTitle("闫盼盼作品" + key);
@@ -255,7 +255,7 @@ public class WechatServiceImpl implements WechatService {
 							}
 
 							case "闫盼盼": {
-								String url = "http://1w629o6087.51mypc.cn/business/meituzz/group";
+								String url = env.getProperty("server.url") +  "/business/meituzz/group";
 								content = HttpUtil.executeUrl(url, HttpUtil.HTTP_GET);
 								JSONArray array = JSON.parseArray(content);
 								StringBuilder sb = new StringBuilder("输入‘套图+作品id'查看套图，例如‘盼盼套图1109’").append("\n\n");
@@ -275,6 +275,21 @@ public class WechatServiceImpl implements WechatService {
 								newsMessage.setArticleCount(articleList.size());
 								newsMessage.setArticles(articleList);
 								respMessage = MessageUtil.newsMessageToXml(newsMessage);
+								break;
+							}
+
+							case "汤福利":{
+								respContent = "汤不热福利来袭";
+								respContent = "声明：\n" +
+										"      Tumblr（中文名：汤博乐）成立于2007年，是目前全球最大的轻博客网站。所有用户皆可免费注册浏览，由于政策问题在国内（中国）暂无法访问，本公众号所发布Tumblr相关内容皆与Tumblr公司无关，是爱好者的经验之谈，用于交流学习。";
+								respContent += "各位看官请自行google翻墙如何登陆tumblr";
+								respContent += "福利视频：https://pan.baidu.com/s/1pLnqYDX";
+								respContent += "提取密码：unuh" + "\n";
+								respContent += "自己动手丰衣足食，收破烂的GitHub：https://github.com/YE-YI/";
+								respContent += "老司机教你开车哦！";
+								textMessage.setContent(respContent);
+								// 将文本消息对象转换成xml字符串
+								respMessage = MessageUtil.textMessageToXml(textMessage);
 								break;
 							}
 
