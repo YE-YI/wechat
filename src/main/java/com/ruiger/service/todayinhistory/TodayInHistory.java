@@ -76,13 +76,4 @@ public class TodayInHistory {
 		return df.format(c.getTime());
 	}
 
-	public static void main(String[] args) {
-		logger.info("≡≡ " + getMonthDay(0) + " ≡≡");
-		TodayInHistory todayInHistory = new TodayInHistory();
-		try {
-			todayInHistory.getTodayInHistoryInfo();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 }

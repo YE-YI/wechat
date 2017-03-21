@@ -16,14 +16,7 @@ public class WxUrlUtil {
 
 	private static String authorize_url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=APPID&redirect_uri=REDIRECT_URI&response_type=code&scope=SCOPE&state=STATE#wechat_redirect";
 
-	public static void main(String[] args) {
-		String url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=APPID&redirect_uri=REDIRECT_URI&response_type=code&scope=SCOPE&state=STATE#wechat_redirect";
-//		String source = "http://1w629o6087.51mypc.cn/oauthServlet";
-		String source = "http://1w629o6087.51mypc.cn/wx/index.html";
-		String redirect_uri = WeixinUtil.urlEncodeUTF8(source);
-		url = url.replace("APPID",appid).replace("REDIRECT_URI",redirect_uri).replace("SCOPE","snsapi_userinfo").replace("STATE","123456789");
-		logger.info(url);
-	}
+
 
 	/**
 	 * 生成微信授权访问首页

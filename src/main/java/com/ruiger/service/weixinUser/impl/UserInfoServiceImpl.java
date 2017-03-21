@@ -123,23 +123,5 @@ public class UserInfoServiceImpl implements UserInfoService {
 		return snsUserInfo;
 	}
 
-	public static void main(String args[]) {
-		UserInfoServiceImpl weixinUserInfoService = new UserInfoServiceImpl();
-		// 获取接口访问凭证
-		String accessToken = WeixinUtil.getAccessToken("wxab65f426dba3a985", "99bccf3b726b5c78f27bbfda0990b24a").getToken();
-		/**
-		 * 获取用户信息
-		 */
-		WeixinUserInfo user = weixinUserInfoService.getUserInfo(accessToken, "ooK-yuJvd9gEegH6nRIen-gnLrVw");
-		logger.info("OpenID：" + user.getOpenId());
-		logger.info("关注状态：" + user.getSubscribe());
-		logger.info("关注时间：" + user.getSubscribeTime());
-		logger.info("昵称：" + user.getNickName());
-		logger.info("性别：" + user.getSex());
-		logger.info("国家：" + user.getCountry());
-		logger.info("省份：" + user.getProvince());
-		logger.info("城市：" + user.getCity());
-		logger.info("语言：" + user.getLanguage());
-		logger.info("头像：" + user.getHeadImgUrl());
-	}
+
 }
