@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.ruiger.modle.message.common.Data;
+import com.ruiger.modle.message.driver.DriverData;
 import com.ruiger.modle.message.response.TemplateMessage;
 import com.ruiger.thread.AccessTokenThread;
 import org.apache.log4j.Logger;
@@ -34,7 +35,11 @@ public class TemplateUtil {
 		TemplateMessage templateMessage = new TemplateMessage();
 		templateMessage.setTouser(openid);
 		templateMessage.setTemplate_id(template_id);
-		templateMessage.setUrl("http://weixin.qq.com/download");
+		String link_url = "";
+		if(data instanceof DriverData){
+			link_url = ((DriverData) data).getDriver_link().getValue();
+		}
+		templateMessage.setUrl(link_url);
 		templateMessage.setTopcolor("#FF0000");
 		templateMessage.setData(data);
 		String json = JSON.toJSONString(templateMessage, SerializerFeature.WriteNullStringAsEmpty);
