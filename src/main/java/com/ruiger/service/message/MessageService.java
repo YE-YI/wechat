@@ -1,5 +1,6 @@
 package com.ruiger.service.message;
 
+import com.ruiger.modle.business.CarPlate;
 import com.ruiger.modle.message.common.Data;
 
 /**
@@ -15,5 +16,5 @@ public interface MessageService {
 	 * 组装老司机模板消息类
 	 * @return
 	 */
-	public Data  assembleDirver();
+	public Data  assembleDirver(CarPlate carPlate);
 }

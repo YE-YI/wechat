@@ -21,6 +21,8 @@ public class DriverData extends Data{
 
 	private Driver_remark driver_remark;
 
+	private Driver_sponsor driver_sponsor;
+
 	public Driver_frist getDriver_frist() {
 		return driver_frist;
 	}
@@ -59,5 +61,13 @@ public class DriverData extends Data{
 
 	public void setDriver_remark(Driver_remark driver_remark) {
 		this.driver_remark = driver_remark;
+	}
+
+	public Driver_sponsor getDriver_sponsor() {
+		return driver_sponsor;
+	}
+
+	public void setDriver_sponsor(Driver_sponsor driver_sponsor) {
+		this.driver_sponsor = driver_sponsor;
 	}
 }

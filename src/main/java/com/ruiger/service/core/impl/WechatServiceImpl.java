@@ -3,6 +3,8 @@ package com.ruiger.service.core.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.ruiger.dao.CarPlateRepository;
+import com.ruiger.modle.business.CarPlate;
 import com.ruiger.modle.business.UgirlNum;
 import com.ruiger.modle.message.common.Data;
 import com.ruiger.modle.message.response.Article;
@@ -46,6 +48,9 @@ public class WechatServiceImpl implements WechatService {
 	private UgirlService ugirlService;
 
 	@Autowired
+	private CarPlateRepository carPlateRepository;
+
+	@Autowired
 	private Environment env;
 
 
@@ -57,10 +62,12 @@ public class WechatServiceImpl implements WechatService {
 	 */
 	public String processRequest(HttpServletRequest request) {
 		String respMessage = null;
+		String server = env.getProperty("server.url");
 
 		try {
 			//默认消息返回
 			String respContent = "哎呀，我的个乖乖处理不过来请求了，请稍后尝试！:-D";
+
 			//处理解析xml
 			Map<String, String> requestMap = MessageUtil.parseXml(request);
 			//发送方账号
@@ -101,18 +108,30 @@ public class WechatServiceImpl implements WechatService {
 					respMessage = MessageUtil.textMessageToXml(textMessage);
 				} else {
 					//回复固定消息
-					if (!StringUtils.isEmpty(content) && content.contains("盼盼套图")) {
+					CarPlate carPlate = carPlateRepository.findByKeyWord(StringUtils.isEmpty(content) ? "" : content.trim());
+					if (carPlate != null) {
+						Data data = messageService.assembleDirver(carPlate);
+						String template_id = env.getProperty("com.ruiger.constant.templateid.driverid");
+						int code = TemplateUtil.sendTemplate(fromUserName, template_id, data);
+						if (code == 0) {
+							respMessage = "";
+						} else {
+							textMessage.setContent(respContent);
+							// 将文本消息对象转换成xml字符串
+							respMessage = MessageUtil.textMessageToXml(textMessage);
+						}
+					} else if (!StringUtils.isEmpty(content) && content.contains("盼盼套图")) {
 						//直接跳到网页
 						String key = content.replace("盼盼套图", "");
-						String url = env.getProperty("server.url") + "business/meituzz/keyUrl?key=" + key;
+						String url = server + "business/meituzz/keyUrl?key=" + key;
 						content = HttpUtil.executeUrl(url, HttpUtil.HTTP_POST);
 						Article article = new Article();
 						article.setTitle("闫盼盼作品" + key);
 						// 图文消息中可以使用QQ表情、符号表情
 						article.setDescription("");
 						// 将图片置为空
-						article.setPicUrl(content.replace("\\",""));
-						article.setUrl("http://1w629o6087.51mypc.cn/wx/meitu.html?key=" + key);
+						article.setPicUrl(content.replace("\\", ""));
+						article.setUrl(server + "wx/meitu.html?key=" + key);
 						articleList.add(article);
 						newsMessage.setArticleCount(articleList.size());
 						newsMessage.setArticles(articleList);
@@ -137,7 +156,7 @@ public class WechatServiceImpl implements WechatService {
 								respMessage = MessageUtil.textMessageToXml(textMessage);
 								break;
 							}
-							case "1":{
+							case "1": {
 //								TodayInHistory.getTodayInHistoryInfo();
 								respContent = String.valueOf(TodayInHistory.getTodayInHistoryInfo());
 								textMessage.setContent(respContent);
@@ -246,7 +265,7 @@ public class WechatServiceImpl implements WechatService {
 								break;
 							}
 
-							case "学车":{
+							case "学车": {
 								respContent = "自己动手丰衣足食，收破烂的GitHub：https://github.com/YE-YI/";
 								respContent += "老司机教你开车哦！";
 								textMessage.setContent(respContent);
@@ -255,7 +274,7 @@ public class WechatServiceImpl implements WechatService {
 							}
 
 							case "闫盼盼": {
-								String url = env.getProperty("server.url") +  "/business/meituzz/group";
+								String url = server + "business/meituzz/group";
 								content = HttpUtil.executeUrl(url, HttpUtil.HTTP_GET);
 								JSONArray array = JSON.parseArray(content);
 								StringBuilder sb = new StringBuilder("输入‘套图+作品id'查看套图，例如‘盼盼套图1109’").append("\n\n");
@@ -278,7 +297,7 @@ public class WechatServiceImpl implements WechatService {
 								break;
 							}
 
-							case "汤福利":{
+							case "汤福利": {
 								respContent = "汤不热福利来袭";
 								respContent = "声明：\n" +
 										"      Tumblr（中文名：汤博乐）成立于2007年，是目前全球最大的轻博客网站。所有用户皆可免费注册浏览，由于政策问题在国内（中国）暂无法访问，本公众号所发布Tumblr相关内容皆与Tumblr公司无关，是爱好者的经验之谈，用于交流学习。";
@@ -294,7 +313,8 @@ public class WechatServiceImpl implements WechatService {
 							}
 
 							default: {
-								respContent = "（这是里面的）很抱歉，现在睿哥哥暂时无法提供此功能给您使用。\n\n回复“1”显示帮助信息";
+								respContent = "别急，您的需求小编会慢慢看。\n有好的资源可以在 " + server +"/wx/carPlate.html 页面添加至此公众号哦" +
+										"\n\n回复“1”显示帮助信息 ";
 								textMessage.setContent(respContent);
 								// 将文本消息对象转换成xml字符串
 								respMessage = MessageUtil.textMessageToXml(textMessage);
@@ -335,11 +355,11 @@ public class WechatServiceImpl implements WechatService {
 			// 事件推送
 			else if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_EVENT)) {
 				// 事件类型
-				String eventType =requestMap.get("Event");
+				String eventType = requestMap.get("Event");
 				// 自定义菜单点击事件
 				if (eventType.equals(MessageUtil.EVENT_TYPE_CLICK)) {
-					switch (eventKey){
-						case "11":{
+					switch (eventKey) {
+						case "11": {
 							respContent = "老司机开车了，请系好安全带";
 							respContent += "摆渡芸链接：https://pan.baidu.com/s/1qXSpYFi";
 							respContent += "提取密码：4sur" + "\n";
@@ -350,20 +370,20 @@ public class WechatServiceImpl implements WechatService {
 							respMessage = MessageUtil.textMessageToXml(textMessage);
 							break;
 						}
-						case "12":{
-							Data data = messageService.assembleDirver();
+						case "12": {
+							Data data = messageService.assembleDirver(null);
 							String template_id = env.getProperty("com.ruiger.constant.templateid.driverid");
-							int code = TemplateUtil.sendTemplate(fromUserName, template_id,data);
+							int code = TemplateUtil.sendTemplate(fromUserName, template_id, data);
 							if (code == 0) {
 								respMessage = "";
-							}else {
+							} else {
 								textMessage.setContent(respContent);
 								// 将文本消息对象转换成xml字符串
 								respMessage = MessageUtil.textMessageToXml(textMessage);
 							}
 							break;
 						}
-						case "13":{
+						case "13": {
 							respContent = "老司机开车了，请系好安全带";
 							respContent += "摆渡芸链接：https://pan.baidu.com/s/1dFvIDG1";
 							respContent += "提取密码：3a99" + "\n";
@@ -375,7 +395,7 @@ public class WechatServiceImpl implements WechatService {
 							break;
 						}
 
-						case "14":{
+						case "14": {
 							respContent = "老司机开车了，请系好安全带";
 							respContent += "摆渡芸链接：https://pan.baidu.com/s/1gfcbEJT";
 							respContent += "提取密码：pfxu";
@@ -385,14 +405,14 @@ public class WechatServiceImpl implements WechatService {
 							break;
 						}
 
-						case "2":{
+						case "2": {
 							List<UgirlNum> list = ugirlService.find8Record();
 							//图文消息每天限制8个
-							for (UgirlNum ugirlNum :list){
+							for (UgirlNum ugirlNum : list) {
 								Article article = new Article();
 								article.setTitle(ugirlNum.getTitle());
-								article.setPicUrl(ugirlNum.getUrl().replace("\\",""));
-								article.setUrl(env.getProperty("server.url") +"wx/ugirl.html?no="+ugirlNum.getNo());
+								article.setPicUrl(ugirlNum.getUrl().replace("\\", ""));
+								article.setUrl(server + "wx/ugirl.html?no=" + ugirlNum.getNo());
 								articleList.add(article);
 							}
 
@@ -402,17 +422,16 @@ public class WechatServiceImpl implements WechatService {
 							break;
 						}
 
-						default:{
-							log.error("开发者反馈：EventKey值没找到，它是:"+eventKey);
-							respContent= "很抱歉，此按键功能正在升级无法使用";
+						default: {
+							log.error("开发者反馈：EventKey值没找到，它是:" + eventKey);
+							respContent = "很抱歉，此按键功能正在升级无法使用";
 							textMessage.setContent(respContent);
 							// 将文本消息对象转换成xml字符串
 							respMessage = MessageUtil.textMessageToXml(textMessage);
 						}
 					}
 
-				}
-				else if(eventType.equals(MessageUtil.EVENT_TYPE_VIEW)){
+				} else if (eventType.equals(MessageUtil.EVENT_TYPE_VIEW)) {
 					// 对于点击菜单转网页暂时不做推送
 				}
 
