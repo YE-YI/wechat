@@ -330,8 +330,17 @@ public class WechatServiceImpl implements WechatService {
 							}
 
 							default: {
+								String tuling_url = "http://www.tuling123.com/openapi/api?key=" + env.getProperty("com.ruiger.tuling") +"&info=";
+								tuling_url += content;
+								JSONObject res = JSON.parseObject(HttpUtil.executeUrl(tuling_url,HttpUtil.HTTP_POST));
 								respContent = "别急，您的需求小编会慢慢看。\n有好的资源可以在 " + server +"/wx/carPlate.html 页面添加至此公众号哦" +
 										"\n\n回复“1”显示帮助信息 ";
+								if(res!=null){
+									if(res.getLongValue("code") == 100000){
+										respContent = res.getString("text") + "\nP.S." + "有好的资源可以在 " + server +"/wx/carPlate.html 页面添加至此公众号哦";
+									}
+								}
+
 								textMessage.setContent(respContent);
 								// 将文本消息对象转换成xml字符串
 								respMessage = MessageUtil.textMessageToXml(textMessage);
