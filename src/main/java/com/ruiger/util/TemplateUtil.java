@@ -7,6 +7,7 @@ import com.ruiger.modle.message.common.Data;
 import com.ruiger.modle.message.driver.DriverData;
 import com.ruiger.modle.message.response.TemplateMessage;
 import com.ruiger.thread.AccessTokenThread;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 /**
@@ -36,8 +37,11 @@ public class TemplateUtil {
 		templateMessage.setTouser(openid);
 		templateMessage.setTemplate_id(template_id);
 		String link_url = "";
-		if(data instanceof DriverData){
-			link_url = ((DriverData) data).getDriver_link().getValue();
+		if (data instanceof DriverData) {
+			String value = ((DriverData) data).getDriver_link().getValue();
+			if (StringUtils.isNotEmpty(value) && value.contains("pan.baidu.com")) {
+				link_url = value;
+			}
 		}
 		templateMessage.setUrl(link_url);
 		templateMessage.setTopcolor("#FF0000");
