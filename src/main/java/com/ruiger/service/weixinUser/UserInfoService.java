@@ -1,5 +1,6 @@
 package com.ruiger.service.weixinUser;
 
+import com.alibaba.fastjson.JSONObject;
 import com.ruiger.modle.SNSUserInfo;
 import com.ruiger.modle.WeixinUserInfo;
 
@@ -29,5 +30,13 @@ public interface UserInfoService {
 	 */
 	@SuppressWarnings({"deprecation","unchecked"})
 	public SNSUserInfo getSNSUserInfo(String accessToken,String openid);
+
+
+	/**
+	 * 获取所有关注用户id   每次最多获取1w个
+	 * @param accessToken
+	 * @return
+	 */
+	public JSONObject getUserInfos(String accessToken);
 
 }

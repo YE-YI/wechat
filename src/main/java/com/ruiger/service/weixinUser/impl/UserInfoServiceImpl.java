@@ -24,6 +24,8 @@ public class UserInfoServiceImpl implements UserInfoService {
 
 	public static String userUrl = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=ACCESS_TOKEN&openid=OPENID";
 	public static String snsUserUrl = "https://api.weixin.qq.com/sns/userinfo?access_token=ACCESS_TOKEN&openid=OPENID&lang=zh_CN";
+
+	public static String user_get_url = "https://api.weixin.qq.com/cgi-bin/user/get?access_token=ACCESS_TOKEN&next_openid=NEXT_OPENID";
 	/**
 	 * 获取用户信息
 	 *
@@ -121,6 +123,32 @@ public class UserInfoServiceImpl implements UserInfoService {
 			logger.error("获取用户信息失败 errcode:" + errorCode + "errmsg:"+ errorMsg);
 		}
 		return snsUserInfo;
+	}
+
+	/**
+	 * 获取所有关注用户id   每次最多获取1w个
+	 *
+	 * @param accessToken
+	 * @return {"total":2,"count":2,"data":{"openid":["","OPENID1","OPENID2"]},"next_openid":"NEXT_OPENID"}
+	 * {"errcode":40013,"errmsg":"invalid appid"}
+	 */
+	@Override
+	public JSONObject getUserInfos(String accessToken) {
+		String head_url = user_get_url.replace("ACCESS_TOKEN",accessToken);
+		String first_url = head_url.replace("NEXT_OPENID","");
+		JSONObject jsonObject = WeixinUtil.httpRequest(first_url, "GET", null);
+		if(null != jsonObject){
+			if(!jsonObject.containsKey("errcode")){
+				return jsonObject;
+			}else {
+				int errorCode = jsonObject.getIntValue("errcode");
+				String errorMsg = jsonObject.getString("errmsg");
+				logger.error("获取用户id失败 errcode:" + errorCode + "errmsg:"+ errorMsg);
+			}
+		}else {
+			logger.error("获取用户id失败");
+		}
+		return null;
 	}
 
 

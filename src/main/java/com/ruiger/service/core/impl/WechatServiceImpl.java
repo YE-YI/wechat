@@ -333,6 +333,7 @@ public class WechatServiceImpl implements WechatService {
 								String tuling_url = "http://www.tuling123.com/openapi/api?key=" + env.getProperty("com.ruiger.tuling") +"&info=";
 								tuling_url += content;
 								JSONObject res = JSON.parseObject(HttpUtil.executeUrl(tuling_url,HttpUtil.HTTP_POST));
+								log.info(res.toString());
 								respContent = "别急，您的需求小编会慢慢看。\n有好的资源可以在 " + server +"/wx/carPlate.html 页面添加至此公众号哦" +
 										"\n\n回复“1”显示帮助信息 ";
 								if(res!=null){

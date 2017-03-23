@@ -1,9 +1,13 @@
 package com.ruiger.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.ruiger.constant.Constant;
 import com.ruiger.service.core.WechatService;
+import com.ruiger.service.weixinUser.UserInfoService;
+import com.ruiger.thread.AccessTokenThread;
 import com.ruiger.util.SignUtil;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +37,9 @@ public class WechatController {
 
 	@Autowired
 	private WechatService wechatService;
+
+	@Autowired
+	private UserInfoService userInfoService;
 
 	@Autowired
 	private Constant constant;
@@ -72,6 +79,17 @@ public class WechatController {
 	@RequestMapping("/test")
 	public String test(){
 		return "Hello World";
+	}
+
+	@RequestMapping("/getUsers")
+	public String getUsers(){
+		logger.info("获取用户openid");
+		JSONObject users  =userInfoService.getUserInfos(AccessTokenThread.accessToken.getToken());
+		JSONArray openids  = users.getJSONObject("data").getJSONArray("openid");
+		for(Object s :openids){
+			logger.info(s.toString());
+		}
+		return users.toString();
 	}
 
 }

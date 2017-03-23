@@ -118,8 +118,10 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>  
-                    <jvmArguments>-Dfile.encoding=UTF-8</jvmArguments>  
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+                    <jvmArguments>-Dfile.encoding=UTF-8</jvmArguments>
                 </configuration>  
 			</plugin>
 		</plugins>

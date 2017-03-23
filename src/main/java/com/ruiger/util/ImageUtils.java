@@ -233,6 +233,7 @@ public class ImageUtils {
 		}
 	}
 
+	/**
 	public static void main(String[] args) throws IOException {
 		//添加文字水印
 		pressText("H:/bbd2153a7ebce1c584d0f6d9746b4810.jpg", "@睿哥哥", "宋体", Font.BOLD, 60, Color.BLACK, 100,100, 1.0f);
@@ -240,4 +241,5 @@ public class ImageUtils {
 //		resize("D:/1.jpg", 100, 600, false);
 		System.out.println("处理完毕！");
 	}
+	 */
 }
