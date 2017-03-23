@@ -312,6 +312,23 @@ public class WechatServiceImpl implements WechatService {
 								break;
 							}
 
+							case "每日飙车":{
+								List<UgirlNum> list = ugirlService.find8Record();
+								//图文消息每天限制8个
+								for (UgirlNum ugirlNum : list) {
+									Article article = new Article();
+									article.setTitle(ugirlNum.getTitle());
+									article.setPicUrl(ugirlNum.getUrl().replace("\\", ""));
+									article.setUrl(server + "wx/ugirl.html?no=" + ugirlNum.getNo());
+									articleList.add(article);
+								}
+
+								newsMessage.setArticleCount(articleList.size());
+								newsMessage.setArticles(articleList);
+								respMessage = MessageUtil.newsMessageToXml(newsMessage);
+								break;
+							}
+
 							default: {
 								respContent = "别急，您的需求小编会慢慢看。\n有好的资源可以在 " + server +"/wx/carPlate.html 页面添加至此公众号哦" +
 										"\n\n回复“1”显示帮助信息 ";
