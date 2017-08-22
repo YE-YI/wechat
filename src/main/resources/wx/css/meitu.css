@@ -1,0 +1,234 @@
+html, body {
+    position: relative;
+    max-width:640px;
+    height: 100%; margin:0px auto;
+}
+body {
+    width: 100%;
+    height: 100%;
+    background:#000;
+    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    color:#000;
+    margin: 0;
+    padding: 0;
+}
+.loading {
+    background: #e4e4e4;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 9999;
+    left:0px;
+    top:0px;
+}
+.loadbox {
+    /*display: block;*/
+    position: relative;
+    width: 140px;
+    height: 140px;
+    margin: 0 auto;
+    margin-top: 50%;
+}
+.loadlogo {
+    /*display: block;*/
+    position: absolute;
+    z-index: 1001;
+    width: 60px;
+    height: 68px;
+    top: 40px;
+    left: 45px;
+    background-size: 100%
+}
+.loadbg {
+    /*display: block;*/
+    position: absolute;
+    z-index: 1000;
+    width: 140px;
+    height: 140px;
+    background: url(../images/loadbg.png) no-repeat;
+    background-size: 100%;
+    -webkit-animation: load 1s ease-in-out infinite both;
+    -moz-animation: load 1s ease-in-out infinite both;
+}
+
+@-webkit-keyframes load {
+    0% {
+        -webkit-transform: rotate(360deg)
+    }
+    100% {
+        -webkit-transform: rotate(0)
+    }
+}
+
+@-moz-keyframes load {
+    0% {
+        -moz-transform: rotate(360deg)
+    }
+    100% {
+        -moz-transform: rotate(0)
+    }
+}
+
+.swiper-container {
+
+}
+.swiper-wrapper {
+    -webkit-perspective: 1200px;
+    -moz-perspective: 1200px;
+    -ms-perspective: 1200px;
+    perspective: 1200px;
+}
+.swiper-slide {
+    position: relative;
+    -webkit-transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+    -ms-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    background-size:100% auto;
+    overflow:hidden;
+    text-align:center;
+    line-height:300px;
+}
+.swiper-slide img{
+    max-width:100%;
+}
+.ani{
+    position:absolute;width:100%; height:100%;left:0px;top:0px;
+}
+
+.fadeInDownBig{
+    -webkit-animation:fadeInDownBig 1s .2s ease both;
+    -moz-animation:fadeInDownBig 1s .2s ease both;}
+@-webkit-keyframes fadeInDownBig{
+    0%{opacity:0;
+        -webkit-transform:translateY(-2000px)}
+    100%{opacity:1;
+        -webkit-transform:translateY(0)}
+}
+@-moz-keyframes fadeInDownBig{
+    0%{opacity:0;
+        -moz-transform:translateY(-2000px)}
+    100%{opacity:1;
+        -moz-transform:translateY(0)}
+}
+
+.fadeInUpBig{
+    -webkit-animation:fadeInUpBig 1s .2s ease both;
+    -moz-animation:fadeInUpBig 1s .2s ease both;}
+@-webkit-keyframes fadeInUpBig{
+    0%{opacity:0;
+        -webkit-transform:translateY(2000px)}
+    100%{opacity:1;
+        -webkit-transform:translateY(0)}
+}
+@-moz-keyframes fadeInUpBig{
+    0%{opacity:0;
+        -moz-transform:translateY(2000px)}
+    100%{opacity:1;
+        -moz-transform:translateY(0)}
+}
+/*p1*/
+.fadeInRight{
+    -webkit-animation:fadeInRight 1s .2s ease both;
+    -moz-animation:fadeInRight 1s .2s ease both;}
+@-webkit-keyframes fadeInRight{
+    0%{opacity:0;
+        -webkit-transform:translateX(150px)}
+    100%{opacity:1;
+        -webkit-transform:translateX(0)}
+}
+@-moz-keyframes fadeInRight{
+    0%{opacity:0;
+        -moz-transform:translateX(150px)}
+    100%{opacity:1;
+        -moz-transform:translateX(0)}
+}
+
+.fadeInLeft{
+    -webkit-animation:fadeInLeft 0.8s .2s ease both;
+    -moz-animation:fadeInLeft 0.8s .2s ease both;}
+@-webkit-keyframes fadeInLeft{
+    0%{opacity:0;
+        -webkit-transform:translateX(-150px)}
+    100%{opacity:1;
+        -webkit-transform:translateX(0)}
+}
+@-moz-keyframes fadeInLeft{
+    0%{opacity:0;
+        -moz-transform:translateX(-150px)}
+    100%{opacity:1;
+        -moz-transform:translateX(0)}
+}
+/*箭头动画*/
+.arrow-up{
+    background:none;
+    height:auto;
+    width:25px;
+    position:absolute;
+    left:50%;
+    top:92%;
+    margin-left:-12px;
+    z-index:99;
+}
+.pt-page-moveIconUp {
+    -webkit-animation: moveIconUp ease 1.5s both infinite;
+    animation: moveToBottom ease 1.5s both infinite;
+}
+@-webkit-keyframes moveIconUp {
+    0% { -webkit-transform: translateY(100%); opacity:0;}
+    50% { -webkit-transform: translateY(0%); opacity:1;}
+    100% { -webkit-transform: translateY(-100%); opacity:0;}
+}
+@keyframes moveIconUp {
+    0% { -webkit-transform: translateY(100%); transform: translateY(100%); opacity:0;}
+    50% { -webkit-transform: translateY(0%); transform: translateY(0%); opacity:1;}
+    100% { -webkit-transform: translateY(-100%); transform: translateY(-100%); opacity:0;}
+}
+@-webkit-keyframes moveToBottom {
+    from { }
+    to { -webkit-transform: translateY(100%); }
+}
+@keyframes moveToBottom {
+    from { }
+    to { -webkit-transform: translateY(100%); transform: translateY(100%); }
+}
+/*音乐按钮动画*/
+
+@-webkit-keyframes moveRo {
+    from {-webkit-transform: rotate(360deg);  }
+    to { -webkit-transform: rotate(-360deg); }
+}
+@keyframes moveRo {
+    from {  transform: rotate(-360deg)}
+    to {  transform: rotate(360deg); }
+}
+
+@-webkit-keyframes openRo {
+    from { }
+    to { -webkit-transform: translateY(100%)
+    ;}
+}
+@keyframes openRo {
+    from { }
+    to { -webkit-transform: translateY(100%) ; transform: translateY(100%);
+
+    }
+}
+
+/*小音符动画*/
+
+@-webkit-keyframes openIconRo {
+    0% { -webkit-transform: translateY(100%); opacity:0;}
+    50% { -webkit-transform: translateY(0%); opacity:0.5;}
+    100% { -webkit-transform: translateY(-100%); opacity:0;}
+}
+@keyframes openIconRo {
+    0% { -webkit-transform: translateY(100%);
+        transform: translateY(100%);
+        opacity:0;
+    }
+    50% { -webkit-transform: translateY(0%); transform: translateY(0%); opacity:0.5;}
+    100% { -webkit-transform: translateY(-100%); transform: translateY(-100%); opacity:0;}
+}
+

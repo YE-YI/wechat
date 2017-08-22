@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta http-equiv="expires" content="0">
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="Cache" content="no-cache">
+	<meta content="always" name="referrer">
+	<meta name="renderer" content="webkit">
+	<meta name="viewport"
+		  content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<title>我的相册</title>
+	<meta name="description" content="大家快来看看我的相册~">
+	<meta name="keywords" content="">
+
+	<script src="https://hm.baidu.com/hm.js?3a5e77b277551f728f4389fc6adce036"></script>
+	<script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+	<script type="text/javascript" src="/webjarslocator/jquery/jquery.js"></script>
+	<script type="text/javascript" src="/webjarslocator/swiper/swiper.jquery.min.js"></script>
+
+	<script type="text/javascript" src="js/template.js"></script>
+	<script type="text/javascript" src="js/common.js"></script>
+
+	<script type="text/javascript" src="js/wx_config.js"></script>
+	<script type="text/javascript" src="js/wx_common.js"></script>
+	<script type="text/javascript" src="js/common_http.js"></script>
+
+
+	<link rel="stylesheet" href="/webjarslocator/swiper/swiper.min.css">
+
+	<link rel="stylesheet" href="css/music.css">
+	<link rel="stylesheet" href="css/meitu.css">
+
+	<link rel="stylesheet" href="css/weui.min.css">
+
+
+</head>
+<body>
+<div style="height: 50px;width: 100%;max-width: 0 auto;">
+	<h1>闫盼盼-美图赚赚VIP收费套图</h1>
+</div>
+<div style="max-width:640px; margin:0 auto;">
+	<div class="swiper-container">
+		<div class="swiper-wrapper" id="meitu_list">      <!--First Slide-->
+		</div>
+		<div class="swiper-pagination"></div>
+	</div>
+</div>
+<div class="music">
+	<i class="icon-music open" num="1"></i>
+	<i class="music-span"></i>
+	<audio id="aud" src="http://file1.zuiku.com/2015/04/09/17/8_9fc1a3011b13a95f331a5ba0e693b34d.mp3" loop="loop"
+		   autoplay="autoplay"></audio>
+	<div class="music_text">开启</div>
+</div>
+<div class="button_sp_area">
+	<a href="#" class="weui-btn weui-btn_mini weui-btn_primary" onclick="alert('1')">分享</a>
+</div>
+</body>
+<script type="text/html" id="meitu_list_tmpl">
+	{{each list as it}}
+	<div class="swiper-slide">
+		<img src="{{it.link}}">
+
+	</div>
+	{{/each}}
+</script>
+<script type="text/javascript">
+	$(function () {
+
+		//初始化数据
+		var key = getUrlVars()['key'];
+		var param = {
+			'key': key
+		};
+		getReqPromise("business/meituzz/view", param).then(function (data) {
+			var html = template("meitu_list_tmpl", data);
+			$('#meitu_list').html(html);
+		});
+
+
+		var mySwiper = $('.swiper-container').swiper({
+			lazyLoading: true,
+			mousewheelControl: true,
+			watchSlidesProgress: true,
+			observer: true,//修改swiper自己或子元素时，自动初始化swiper
+			observeParents: true,//修改swiper的父元素时，自动初始化swiper
+			effect: 'cube'
+		});
+
+	});
+
+	$(function () {
+		var params = {
+			'page_url': window.location.href
+		};
+		getReqPromise("getWxConfig", params).then(function (data) {
+//			data = $.parseJSON(data);
+			wx.config({
+				debug: false,
+				appId: data.appId,
+				timestamp: data.timestamp,
+				nonceStr: data.nonceStr,
+				signature: data.signature,
+				jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareWeibo', 'onMenuShareQZone']
+			});
+			wx_share();
+		});
+
+		function wx_share() {
+			wx.ready(function () {
+				// 获取“分享到朋友圈”按钮点击状态及自定义分享内容接口
+				wx.onMenuShareTimeline({
+					title: '第八篇 ：微信公众平台开发实战Java版之如何网页授权获取用户基本信息', // 分享标题
+					link: "http://www.cnblogs.com/liuhongfeng/p/5099149.html",
+					imgUrl: "http://images.cnblogs.com/cnblogs_com/liuhongfeng/737147/o_1442809977405.jpg" // 分享图标
+				});
+				// 获取“分享给朋友”按钮点击状态及自定义分享内容接口
+				wx.onMenuShareAppMessage({
+					title: '第七篇 ：微信公众平台开发实战Java版之如何获取微信用户基本信息', // 分享标题
+					desc: "第七篇 ：微信公众平台开发实战Java版之如何获取微信用户基本信息", // 分享描述
+					link: "http://www.cnblogs.com/liuhongfeng/p/5057167.html",
+					imgUrl: "http://images.cnblogs.com/cnblogs_com/liuhongfeng/737147/o_QQ%E5%9B%BE%E7%89%8720151118180508.png", // 分享图标
+					type: 'link', // 分享类型,music、video或link，不填默认为link
+				});
+
+				//获取“分享到QQ”按钮点击状态及自定义分享内容接口
+				wx.onMenuShareQQ({
+					title: '第六篇 ：微信公众平台开发实战Java版之如何自定义微信公众号菜单', // 分享标题
+					desc: '第六篇 ：微信公众平台开发实战Java版之如何自定义微信公众号菜单', // 分享描述
+					link: 'http://www.cnblogs.com/liuhongfeng/p/4857312.html', // 分享链接
+					imgUrl: 'http://images.cnblogs.com/cnblogs_com/liuhongfeng/737147/o_qrcode_for_gh_228cd30523bc_258.jpg', // 分享图标
+					success: function () {
+						// 用户确认分享后执行的回调函数
+					},
+					cancel: function () {
+						// 用户取消分享后执行的回调函数
+					}
+				});
+
+				//获取“分享到腾讯微博”按钮点击状态及自定义分享内容接口
+				wx.onMenuShareWeibo({
+					title: '分享到腾讯微博标题', // 分享标题
+					desc: '分享到腾讯微博描述', // 分享描述
+					link: 'http://www.cnblogs.com/liuhongfeng/p/4857312.html', // 分享链接
+					imgUrl: 'http://images.cnblogs.com/cnblogs_com/liuhongfeng/737147/o_qrcode_for_gh_228cd30523bc_258.jpg', // 分享图标
+					success: function () {
+						// 用户确认分享后执行的回调函数
+					},
+					cancel: function () {
+						// 用户取消分享后执行的回调函数
+					}
+				});
+
+				//获取“分享到QQ空间”按钮点击状态及自定义分享内容接口
+				wx.onMenuShareQZone({
+					title: '分享到QQ空间标题', // 分享标题
+					desc: '分享到QQ空间描述', // 分享描述
+					link: 'http://www.cnblogs.com/liuhongfeng/p/4857312.html', // 分享链接
+					imgUrl: 'http://images.cnblogs.com/cnblogs_com/liuhongfeng/737147/o_qrcode_for_gh_228cd30523bc_258.jpg', // 分享图标
+					success: function () {
+						// 用户确认分享后执行的回调函数
+					},
+					cancel: function () {
+						// 用户取消分享后执行的回调函数
+					}
+				});
+			});
+		}
+	});
+
+
+	function fixPagesHeight() {
+		$('.swiper-slide,.swiper-container').css({
+			height: $(window).height()
+		})
+	}
+	$(window).on('resize', function () {
+		fixPagesHeight();
+	})
+	fixPagesHeight();
+
+</script>
+</html>

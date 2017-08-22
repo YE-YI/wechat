@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+	<meta charset="UTF-8">
+
+	<title>车牌添加页面</title>
+
+	<link rel="stylesheet" href="css/car.css" media="screen" type="text/css"/>
+
+	<script type="text/javascript" src="/webjarslocator/jquery/jquery.js"></script>
+
+	<script type="text/javascript" src="js/common.js"></script>
+
+	<script type="text/javascript" src="js/wx_common.js"></script>
+	<script type="text/javascript" src="js/common_http.js"></script>
+
+	<!-- JavaScript -->
+	<script src="widget/alertifyjs/alertify.min.js"></script>
+
+	<!-- CSS -->
+	<link rel="stylesheet" href="widget/alertifyjs/css/alertify.min.css"/>
+	<!-- Default theme -->
+	<link rel="stylesheet" href="widget/alertifyjs/css/themes/default.min.css"/>
+	<!-- Semantic UI theme -->
+	<link rel="stylesheet" href="widget/alertifyjs/css/themes/semantic.min.css"/>
+	<!-- Bootstrap theme -->
+	<link rel="stylesheet" href="widget/alertifyjs/css/themes/bootstrap.min.css"/>
+
+	<!--
+		RTL version
+	-->
+	<link rel="stylesheet" href="widget/alertifyjs/css/alertify.rtl.min.css"/>
+	<!-- Default theme -->
+	<link rel="stylesheet" href="widget/alertifyjs/css/themes/default.rtl.min.css"/>
+	<!-- Semantic UI theme -->
+	<link rel="stylesheet" href="widget/alertifyjs/css/themes/semantic.rtl.min.css"/>
+	<!-- Bootstrap theme -->
+	<link rel="stylesheet" href="widget/alertifyjs/css/themes/bootstrap.rtl.min.css"/>
+
+
+</head>
+
+<body>
+
+<div class="container">
+	<form id="contact"  method="post">
+		<h3>Add Car plate</h3>
+		<h4>添加车牌资源信息!</h4>
+		<fieldset>
+			<input placeholder="标题" name="title" type="text" tabindex="1" required autofocus>
+		</fieldset>
+		<fieldset>
+			<input placeholder="车牌号" name="keyWord" id="keyWord" type="text" tabindex="2" required>
+		</fieldset>
+		<fieldset>
+			<input placeholder="链接 starts with http://" name="link" type="url" tabindex="3" required>
+		</fieldset>
+		<fieldset>
+			<input placeholder="密码(无密码请填写默认密码1024)" name="password" type="text" tabindex="4" required>
+		</fieldset>
+		<fieldset>
+			<textarea placeholder="申明" name="description" tabindex="5"></textarea>
+		</fieldset>
+		<fieldset>
+			<button name="submit" type="submit" id="contact-submit" >Submit</button>
+		</fieldset>
+	</form>
+
+</div>
+<div style="text-align:center;clear:both">
+	<script type="text/javascript">
+		$("#contact").on("submit", function (e) {
+			e.preventDefault();
+			getReqPromise("carPlate/add", $(this).serialize()).then(function (data) {
+				console.log(data['errCode'] + data['msg'])
+				var errCode = data['errCode'];
+				if(errCode != 0){
+					$("#keyWord").focus()
+				}else {
+					$("#contact")[0].reset()
+				}
+				alertify.alert('提示',data['msg']);
+
+
+			});
+		});
+	</script>
+</div>
+</body>
+
+</html>

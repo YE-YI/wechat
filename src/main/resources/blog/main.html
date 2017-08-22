@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<script type="text/javascript" src="/webjarslocator/jquery/jquery.js"></script>
+	<link rel="stylesheet" href="widget/bootstrap3/css/bootstrap.min.css">
+	<link rel="stylesheet" href="widget/bootstrap3/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="css/blog.css">
+	<script src="widget/bootstrap3/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			var head = $.get("/blog/foregroud/common/head.html",function(data){
+				$("#head").html(data);
+			});
+			var menu = $.get("/blog/foregroud/common/menu.html",function(data){
+				$("#menu").html(data)
+			});
+			var footer = $.get("/blog/foregroud/common/footer.html",function(data){
+				$("#footer").html(data);
+
+			});
+		});
+
+		function changeClass(obj) {
+			var li = obj.parentNode; //获取父节点
+			li.className = "active";
+		}
+
+	</script>
+</head>
+<body>
+<div class="container">
+	<div class="row" id="head">
+	</div>
+	<div class="row" id="menu" style="padding-top: 20px">
+	</div>
+
+	<div class="row">
+		<div class="col-md-9" id="commonPage">
+		</div>
+		<div class="col-md-3" id="rightList">
+		</div>
+	</div>
+
+	<div class="row" id="footer">
+	</div>
+
+</div>
+
+<script type="text/javascript">
+//	百度分享api
+window._bd_share_config = {
+	"common" : {
+		"bdSnsKey" : {},
+		"bdText" : "",
+		"bdMini" : "2",
+		"bdMiniList" : false,
+		"bdPic" : "",
+		"bdStyle" : "0",
+		"bdSize" : "32"
+	},
+	"share" : {},
+	"image" : {
+		"viewList" : [ "weixin", "tsina", "qzone", "tieba", "renren",
+			"linkedin" ],
+		"viewText" : "分享到：",
+		"viewSize" : "24"
+	},
+	"selectShare" : {
+		"bdContainerClass" : null,
+		"bdSelectMiniList" : [ "weixin", "tsina", "qzone", "tieba",
+			"renren", "linkedin" ]
+	}
+};
+with (document)
+	0[(getElementsByTagName('head')[0] || body)
+			.appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='
+			+ ~(-new Date() / 36e5)];
+</script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Progress演示，志玲姐姐 - swiper中文网</title>
+	<meta name="viewport" content="initial-scale=1">
+
+	<script type="text/javascript" src="/webjarslocator/jquery/jquery.js"></script>
+	<script type="text/javascript" src="/webjarslocator/swiper/swiper.jquery.min.js"></script>
+
+	<script type="text/javascript" src="js/template.js"></script>
+	<script type="text/javascript" src="js/common.js"></script>
+
+	<script type="text/javascript" src="js/wx_config.js"></script>
+	<script type="text/javascript" src="js/wx_common.js"></script>
+	<script type="text/javascript" src="js/common_http.js"></script>
+
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+		}
+		.swiper-container {
+
+		}
+		.swiper-wrapper {
+			-webkit-perspective: 1200px;
+			-moz-perspective: 1200px;
+			-ms-perspective: 1200px;
+			perspective: 1200px;
+		}
+		.swiper-slide {
+			position: relative;
+			-webkit-transform-style: preserve-3d;
+			-moz-transform-style: preserve-3d;
+			-ms-transform-style: preserve-3d;
+			transform-style: preserve-3d;
+			background-size:100% auto;
+			overflow:hidden;
+			text-align:center;
+			line-height:300px;
+		}
+		.swiper-slide img{
+			max-width:100%;
+		}
+
+	</style>
+</head>
+<body>
+<div style="max-width:640px; margin:0 auto;">
+	<div class="swiper-container">
+		<div class="swiper-wrapper">
+			<div class="swiper-wrapper" id="ugirl_list">      <!--First Slide-->
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/html" id="ugirl_list_tmpl">
+	{{each list as it}}
+	<div class="swiper-slide">
+		<img src="{{it.image_urls}}">
+
+	</div>
+	{{/each}}
+</script>
+<script type = "text/javascript">
+	$(function () {
+
+		//初始化数据
+		var no = getUrlVars()['no'];
+		var param = {
+			'no': no
+		};
+		getReqPromise("business/ugirl/view", param).then(function (data) {
+			var html = template("ugirl_list_tmpl", data);
+			$('#ugirl_list').html(html);
+		});
+
+
+
+
+	});
+
+	function fixPagesHeight() {
+		$('.swiper-slide,.swiper-container').css({
+			height: $(window).height(),
+		})
+	}
+	$(window).on('resize', function() {
+		fixPagesHeight();
+	})
+	fixPagesHeight();
+
+
+	var mySwiper = new Swiper('.swiper-container', {
+		effect: 'cube',
+		lazyLoading : true,
+		mousewheelControl: true,
+		watchSlidesProgress: true,
+		observer: true,//修改swiper自己或子元素时，自动初始化swiper
+		observeParents: true,//修改swiper的父元素时，自动初始化swiper
+		onInit: function(swiper) {
+			swiper.myactive = 0;
+
+		},
+		onProgress: function(swiper) {
+			for (var i = 0; i < swiper.slides.length; i++) {
+				var slide = swiper.slides[i];
+				var progress = slide.progress;
+				var translate, boxShadow;
+
+				translate = progress * swiper.height * 0.8;
+				scale = 1 - Math.min(Math.abs(progress * 0.2), 1);
+				boxShadowOpacity = 0;
+
+				slide.style.boxShadow = '0px 0px 10px rgba(0,0,0,' + boxShadowOpacity + ')';
+
+				if (i == swiper.myactive) {
+					es = slide.style;
+					es.webkitTransform = es.MsTransform = es.msTransform = es.MozTransform = es.OTransform = es.transform = 'translate3d(0,' + (translate) + 'px,0) scale(' + scale + ')';
+					es.zIndex=0;
+
+
+				}else{
+					es = slide.style;
+					es.webkitTransform = es.MsTransform = es.msTransform = es.MozTransform = es.OTransform = es.transform ='';
+					es.zIndex=1;
+
+				}
+
+			}
+
+		},
+
+
+		onTransitionEnd: function(swiper, speed) {
+			for (var i = 0; i < swiper.slides.length; i++) {
+				//	es = swiper.slides[i].style;
+				//	es.webkitTransform = es.MsTransform = es.msTransform = es.MozTransform = es.OTransform = es.transform = '';
+
+				//	swiper.slides[i].style.zIndex = Math.abs(swiper.slides[i].progress);
+
+
+			}
+
+			swiper.myactive = swiper.activeIndex;
+
+		},
+		onSetTransition: function(swiper, speed) {
+
+			for (var i = 0; i < swiper.slides.length; i++) {
+				//if (i == swiper.myactive) {
+
+				es = swiper.slides[i].style;
+				es.webkitTransitionDuration = es.MsTransitionDuration = es.msTransitionDuration = es.MozTransitionDuration = es.OTransitionDuration = es.transitionDuration = speed + 'ms';
+				//}
+			}
+
+		}
+
+	});
+</script>
+
+</body>
+</html>
